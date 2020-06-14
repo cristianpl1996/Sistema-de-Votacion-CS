@@ -1,14 +1,18 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.hashers import make_password
 
 class VotanteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Votante
         fields = '__all__'
         #fields = ['cedula' ,'nombre', 'apellido' ,'email' ,'telefono' , 'fotografia' ,'contraseña', 'ideleccion']
+    def create(self, validated_data):
+        validated_data['contraseña'] = make_password(validated_data['contraseña'])
+        return super(VotanteSerializer, self).create(validated_data)
 
 class CandidatoSerializer(serializers.HyperlinkedModelSerializer):
-    #idpartido = serializers.SlugRelatedField(many=True, read_only=True, slug_field='nombre')
+    #votantes = VotanteSerializer(many=True)
     class Meta:
         model = Candidato
         fields = '__all__'

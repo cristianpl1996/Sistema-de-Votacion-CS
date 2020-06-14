@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 from django.conf import settings
+from rest_framework.authtoken import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1.0/', include('sistema.urls'))
+    path('api/v1.0/', include('sistema.urls')),
+    path('api-auth', views.obtain_auth_token)
 ]
 
 if settings.DEBUG:

@@ -27,23 +27,6 @@ class Eleccion(models.Model):
         verbose_name_plural = "elecciones"
         
     def __str__(self):
-        return self.nombre 
-
-class Votante(models.Model):
-    cedula = models.CharField(max_length=50, null=True, blank=True)
-    nombre = models.CharField(max_length=50, null=True, blank=True)
-    apellido = models.CharField(max_length=50, null=True, blank=True)
-    email = models.CharField(max_length=50, null=True, blank=True)
-    telefono = models.CharField(max_length=15, null=True, blank=True)
-    fotografia = models.ImageField(upload_to="fotografia_votante", null=True, blank=True)
-    contraseña = models.CharField(max_length=50)
-    ideleccion = models.ForeignKey(Eleccion, related_name='votantes', null=True, blank=True, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "votante"
-        verbose_name_plural = "votantes"
-        
-    def __str__(self):
         return self.nombre
 
 class PartidoPolitico(models.Model):
@@ -61,7 +44,7 @@ class PartidoPolitico(models.Model):
         return self.nombre
 
 class Candidato(models.Model):
-    cedula = models.CharField(max_length=50, null=True, blank=True)
+    cedula = models.CharField(max_length=50, null=True, blank=True, unique=True)
     nombre = models.CharField(max_length=50, null=True, blank=True)
     apellido = models.CharField(max_length=50, null=True, blank=True)
     telefono = models.CharField(max_length=15, null=True, blank=True)
@@ -74,5 +57,27 @@ class Candidato(models.Model):
         verbose_name_plural = "candidatos"
         
     def __str__(self):
-        return "{} {}".format(self.nombre, self.apellido)
+        return "{} {}".format(self.nombre, self.apellido) 
+
+class Votante(models.Model):
+    cedula = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    nombre = models.CharField(max_length=50, null=True, blank=True)
+    apellido = models.CharField(max_length=50, null=True, blank=True)
+    email = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    telefono = models.CharField(max_length=15, null=True, blank=True)
+    fotografia = models.ImageField(upload_to="fotografia_votante", null=True, blank=True)
+    contraseña = models.CharField(max_length=100, null=True, blank=True)
+    ideleccion = models.ForeignKey(Eleccion, related_name='votantes', null=True, blank=True, on_delete=models.CASCADE)
+    votantes = models.ForeignKey(Candidato, related_name='votantes', null=True, blank=True, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "votante"
+        verbose_name_plural = "votantes"
+        
+    def __str__(self):
+        return "{} {}".format(self.nombre, self.apellido) 
+
+
+
+
     
